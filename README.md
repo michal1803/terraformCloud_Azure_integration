@@ -1,1 +1,0 @@
-# terraformCloud_Azure_integration
