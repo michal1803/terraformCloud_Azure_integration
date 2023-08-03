@@ -18,3 +18,14 @@ resource "azurerm_resource_group" "michal-rg" {
     environment = "Terraform Azure"
   }
 }
+
+resource "azurerm_virtual_network" "michal-vnet" {
+  name                = "michal-vnet"
+  resource_group_name = azurerm_resource_group.michal-rg.name
+  location            = azurerm_resource_group.michal-rg.location
+  address_space       = ["10.10.0.0/16"]
+
+  tags = {
+    environment = "Terraform Azure"
+  }
+}
