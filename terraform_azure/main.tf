@@ -39,8 +39,8 @@ resource "azurerm_subnet" "michal-subnet" {
 }
 
 resource "azurerm_network_security_group" "michal-nsg" {
-  name = "michal-nsg"
-  location = azurerm_resource_group.michal-rg.location
+  name                = "michal-nsg"
+  location            = azurerm_resource_group.michal-rg.location
   resource_group_name = azurerm_resource_group.michal-rg.name
 
   tags = {
@@ -60,4 +60,9 @@ resource "azurerm_network_security_rule" "michal-ns-rule" {
   destination_address_prefix  = "*"
   resource_group_name         = azurerm_resource_group.michal-rg.name
   network_security_group_name = azurerm_network_security_group.michal-nsg.name
+}
+
+resource "azurerm_subnet_network_security_group_association" "michal-sga" {
+  subnet_id                 = azurerm_subnet.michal-subnet.id
+  network_security_group_id = azurerm_network_security_group.michal-nsg.id
 }
