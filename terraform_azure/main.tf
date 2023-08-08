@@ -94,3 +94,36 @@ resource "azurerm_network_interface" "michal_nic" {
     environment = "Terraform Azure"
   }
 }
+
+resource "azurerm_linux_virtual_machine" "michal-linux-vm" {
+  name                = "michal-linux-vm"
+  resource_group_name = azurerm_resource_group.michal-rg.name
+  location            = azurerm_resource_group.michal-rg.location
+  size                = "Standard_B1s"
+  admin_username      = "adminuser"
+  network_interface_ids = [
+    azurerm_network_interface.michal_nic.id
+  ]
+
+  admin_ssh_key {
+    username = "adminuser"
+    #ssh-keygen -t rsa
+    public_key = file("~/.ssh/michalazurekey.pub")
+  }
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-focal"
+    sku       = "20_04-lts"
+    version   = "latest"
+  }
+
+  tags = {
+    environment = "Terraform Azure"
+  }
+}
