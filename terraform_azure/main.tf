@@ -105,6 +105,8 @@ resource "azurerm_linux_virtual_machine" "michal-linux-vm" {
     azurerm_network_interface.michal_nic.id
   ]
 
+  custom_data = filebase64("customdata.tpl")
+
   admin_ssh_key {
     username = "adminuser"
     #ssh-keygen -t rsa
