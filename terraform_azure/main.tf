@@ -66,3 +66,31 @@ resource "azurerm_subnet_network_security_group_association" "michal-sga" {
   subnet_id                 = azurerm_subnet.michal-subnet.id
   network_security_group_id = azurerm_network_security_group.michal-nsg.id
 }
+
+resource "azurerm_public_ip" "michal-ip" {
+  name                = "michal-ip"
+  resource_group_name = azurerm_resource_group.michal-rg.name
+  location            = azurerm_resource_group.michal-rg.location
+  allocation_method   = "Static"
+
+  tags = {
+    environment = "Terraform Azure"
+  }
+}
+
+resource "azurerm_network_interface" "michal_nic" {
+  name                = "michal-nic"
+  location            = azurerm_resource_group.michal-rg.location
+  resource_group_name = azurerm_resource_group.michal-rg.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.michal-subnet.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.michal-ip.id
+  }
+
+  tags = {
+    environment = "Terraform Azure"
+  }
+}
